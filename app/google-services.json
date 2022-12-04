@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "572253853956",
+    "firebase_url": "https://smsappproject-default-rtdb.firebaseio.com",
     "project_id": "smsappproject",
     "storage_bucket": "smsappproject.appspot.com"
   },
