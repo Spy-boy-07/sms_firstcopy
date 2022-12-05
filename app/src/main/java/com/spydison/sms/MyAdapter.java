@@ -17,7 +17,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<User> list;
-    int checkedPosition = -1;
+    int checkedPosition = 0;
 
     public MyAdapter(Context context, ArrayList<User> list) {
         this.context = context;

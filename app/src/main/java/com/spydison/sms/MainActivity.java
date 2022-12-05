@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     TextView tvname, tvusername, tvemail;
     CardView challenge,profile,request,updates;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
-
-
+//
+        FirebaseDatabase database12 = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database12.getReference("message");
+        myRef.setValue("Hello, World!");
+//
         if(currentUser == null){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

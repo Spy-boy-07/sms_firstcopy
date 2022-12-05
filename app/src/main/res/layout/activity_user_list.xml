@@ -19,11 +19,14 @@
         android:layout_height="50dp"
         android:layout_marginBottom="56dp"
         android:clickable="true"
+        android:onClick="challenged"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_myplaces" />
+        app:srcCompat="@android:drawable/ic_menu_myplaces"
+        android:focusable="true"
+        />
 
     <!--        app:layout_constraintTop_toTopOf="parent"-->
 <!--        app:layout_constraintBottom_toTopOf="@+id/challButt"-->
