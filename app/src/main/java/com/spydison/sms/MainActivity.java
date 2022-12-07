@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
 //
-        FirebaseDatabase database12 = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database12.getReference("message");
-        myRef.setValue("Hello, World!");
+//        FirebaseDatabase database12 = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database12.getReference("message");
+//        myRef.setValue("Hello, World!");
 //
         if(currentUser == null){
             Intent intent = new Intent(this, LoginActivity.class);
@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openUpdates() {
+        Intent ii = new Intent(this,updates.class);
+        startActivity(ii);
     }
 
     private void openProfile() {

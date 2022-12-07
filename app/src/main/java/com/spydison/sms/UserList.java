@@ -2,15 +2,16 @@ package com.spydison.sms;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,9 +19,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class UserList extends AppCompatActivity {
@@ -29,9 +33,11 @@ public class UserList extends AppCompatActivity {
     DatabaseReference database;
     MyAdapter myAdapter;
     ArrayList<User> list;
-    FloatingActionButton button ;
+//    FloatingActionButton button ;
     FirebaseAuth authcurr = FirebaseAuth.getInstance();
     FirebaseUser currentUser = authcurr.getCurrentUser();
+//    String username= currentUser.getEmail();
+//    DatabaseReference challref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,8 @@ public class UserList extends AppCompatActivity {
 
         myAdapter = new MyAdapter(this,list);
         recyclerView.setAdapter(myAdapter);
+//creates challenge branch
+//        challref = FirebaseDatabase.getInstance().getReference("challenges");
 
 //        User.class = (String) FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
 
@@ -60,9 +68,8 @@ public class UserList extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     User user = dataSnapshot.getValue(User.class);
-                    assert user != null;
                     if (!Objects.equals(user.email, currentUser.getEmail()))
-                    list.add(user);
+                        list.add(user);
                 }
                 myAdapter.notifyDataSetChanged();
             }
@@ -71,6 +78,8 @@ public class UserList extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+
 //If you uncomment the portion after this and then run it, IT crashes...
         //Please someone find a way
 
@@ -90,13 +99,50 @@ public class UserList extends AppCompatActivity {
 
     }
 
+    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("chalenj");
+    DatabaseReference oldRef = FirebaseDatabase.getInstance().getReference("users");
+    //    Challenges challenge = new Challenges(currentUser, myAdapter.getSelected());
+    String name = "";
     public void challenged(View objectView){
-        if (myAdapter.getSelected() != null){
-                    Toast.makeText(UserList.this, "Challenged to "+myAdapter.getSelected().getName(), Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(UserList.this, "No Selection", Toast.LENGTH_SHORT).show();
-                }
+
+
+        oldRef.child(currentUser.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                name = snapshot.getValue(String.class);
+                add_data(name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
+    HashMap<String,Object> aa = new HashMap<String,Object>();
+
+    private void add_data(String name){
+        if (myAdapter.getSelected() != null){
+            Toast.makeText(UserList.this, "Challenged to "+myAdapter.getSelected().name, Toast.LENGTH_SHORT).show();
+            myRef.child("challenge").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    aa = (HashMap<String,Object>)snapshot.getValue();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            aa.put(myAdapter.getSelected().getUsername(),name);
+            myRef.child("challenge").updateChildren(aa);
+
+        }
+        else{
+            Toast.makeText(UserList.this, "No Selection", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -17,7 +17,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<User> list;
-    int checkedPosition = 0;
+    int checkedPosition = -1;
 
     public MyAdapter(Context context, ArrayList<User> list) {
         this.context = context;
@@ -85,7 +85,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 }
             });
         }
-
     }
 
     public User getSelected(){
@@ -94,5 +93,4 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
         return null;
     }
-
 }
